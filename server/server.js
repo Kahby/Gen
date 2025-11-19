@@ -310,14 +310,14 @@ app.post('/api/submissions', upload.single('output'), async (req, res) => {
 
     // Check if user has already submitted
     const existingSubmission = await FormSubmission.findOne({ email: email.toLowerCase() });
-    if (existingSubmission) {
+    if (existingSubmission >= 3) {
       // Delete uploaded file if user has already submitted
       if (req.file) {
         fs.unlinkSync(req.file.path);
       }
       return res.status(400).json({
         message: 'Submission already exists',
-        error: 'You have already submitted a prompt. Each email can only submit once.'
+        error: 'You have already submitted 3 prompts. Each email can only submit up to 3 times.'
       });
     }
 
