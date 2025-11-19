@@ -13,14 +13,12 @@ npm install
 ```env
 MONGODB_URI=your_mongodb_connection_string_here
 PORT=5000
-GROQ_API_KEY=your_groq_api_key_here
 FRONTEND_URL=*  # Optional: Set to your frontend URL for CORS restriction
 ```
 
 **Important:** 
-- `MONGODB_URI` and `GROQ_API_KEY` are **REQUIRED** - the server will not start without them
+- `MONGODB_URI` is **REQUIRED** - the server will not start without it
 - Get your MongoDB connection string from [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) or use your local MongoDB URI
-- Get your Groq API key from [Groq Console](https://console.groq.com/)
 - Never commit your `.env` file to version control
 
 3. Make sure MongoDB is running on your system.
@@ -37,17 +35,12 @@ npm start
 ## API Endpoints
 
 ### GET `/api/export-submissions`
-Exports all form submissions from MongoDB to an Excel (.xlsx) file.
+Exports all form submissions from MongoDB to an Excel (.xlsx) file. Requires `x-admin-token` header.
 
 **Response:** Downloads an Excel file named `submissions_export.xlsx`
 
-**Example:**
-```bash
-curl http://localhost:5000/api/export-submissions --output submissions.xlsx
-```
-
 ### POST `/api/submissions`
-Submit a new form submission. The prompt will be automatically analyzed using Groq API (Llama 3.1 8B Instant) to generate scores.
+Submit a new form submission. Score fields (precision, design, creativity, accuracy, overall) are stored with default value `0`.
 
 **Request Body:**
 ```json
@@ -66,6 +59,18 @@ Submit a new form submission. The prompt will be automatically analyzed using Gr
 ### GET `/api/submissions`
 Returns all form submissions as JSON (for testing).
 
+### POST `/api/admin/leaderboard/upload`
+Admin-only endpoint to upload an Excel leaderboard for a category. Accepts `category` form field and `leaderboard` file (`.xlsx`, `.xls`, `.csv`). Replaces any existing leaderboard for that category.
+
+### GET `/api/leaderboard/:category`
+Public endpoint returning leaderboard entries for the requested category (meme, art, storytelling, song, poetry).
+
+### POST `/api/admin/leaderboard/visibility`
+Admin-only endpoint to publish (`visible=true`) or hide (`visible=false`) a leaderboard for a category. Requires the `x-admin-token` header.
+
+### POST `/api/admin/leaderboard/reset`
+Admin-only endpoint that deletes the stored leaderboard data and removes the uploaded Excel file for a category. Requires the `x-admin-token` header.
+
 ## FormSubmission Model
 
 The FormSubmission model includes:
@@ -79,24 +84,12 @@ The FormSubmission model includes:
 - `createdAt` (Date, auto-generated)
 - `updatedAt` (Date, auto-generated)
 
-## AI-Powered Prompt Analysis
-
-The system uses **Groq API** with **Llama 3.1 8B Instant** model to automatically analyze submitted prompts and generate scores:
-
-- **Precision (0-100)**: Clarity and specificity of the prompt
-- **Design Quality (0-100)**: Structure and organization
-- **Creativity (0-100)**: Innovation and originality
-- **Accuracy (0-100)**: Likelihood of producing expected output
-- **Overall (0-100)**: Comprehensive evaluation
-
-Scores are automatically calculated when a submission is created via the POST endpoint.
-
 ## Notes
 
-- The Excel export endpoint uses `exceljs` library
+- The Excel export and leaderboard parsing use the `exceljs` library
 - Data is fetched using `.lean()` for better performance
 - The export includes all fields from the FormSubmission model
 - Headers are automatically styled in bold
-- Prompt analysis uses Groq API with Llama 3.1 8B Instant model
-- Analysis happens automatically on form submission
+- Leaderboards remain hidden until an admin publishes them using the visibility endpoint
+- Uploaded leaderboard Excel files are stored under `server/uploads/leaderboards/`; resetting or re-uploading cleans up the previous file
 

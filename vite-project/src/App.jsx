@@ -5,6 +5,8 @@ import HomePage from './pages/HomePage';
 import SubmitPromptPage from './pages/SubmitPromptPage';
 import EvaluationProcessPage from './pages/EvaluationProcessPage';
 import AdminLoginPage from './pages/AdminLoginPage';
+import AdminPanelPage from './pages/AdminPanelPage';
+import LeaderboardPage from './pages/LeaderboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
@@ -25,7 +27,9 @@ function App() {
               }
             />
             <Route path="/evaluation" element={<EvaluationProcessPage />} />
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/login" element={<AdminLoginPage />} />
+            <Route path="/admin-panel" element={<AdminPanelPage />} />
           </Routes>
           <Footer />
         </div>

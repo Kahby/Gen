@@ -22,7 +22,6 @@ When running frontend and backend on different servers, you may encounter:
    ```env
    PORT=5000
    MONGODB_URI=your_mongodb_connection_string
-   GROQ_API_KEY=your_groq_api_key
    FRONTEND_URL=https://your-frontend-domain.com  # Optional: restrict CORS to specific origin
    ```
 

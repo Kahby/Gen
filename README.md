@@ -1,12 +1,12 @@
 # Prompt Masters
 
-AI-powered prompt analysis platform for evaluating creative prompts across multiple themes including memes, art, stories, music, and poetry.
+Prompt submission and evaluation platform for managing creative prompts across multiple themes including memes, art, stories, music, and poetry.
 
 ## Features
 
 - 🎨 **5 Creative Themes**: Meme Generation, AI Visual Art, Digital Storytelling, Song Factory, and Poetry
-- 🤖 **AI-Powered Analysis**: Automatic prompt evaluation using Groq API (Llama 3.1 8B Instant)
-- 📊 **Comprehensive Scoring**: Precision, Design, Creativity, Accuracy, and Overall scores
+- 📊 **Submission Tracking**: Precision, Design, Creativity, Accuracy, and Overall score fields recorded for each entry
+- 🏆 **Category Leaderboards**: Upload curated Excel leaderboards per category and display them publicly
 - 🔐 **User Authentication**: Secure login with @vitbhopal.ac.in email validation
 - 📁 **File Upload**: Support for .mp3, .png, .jpg, .jpeg files
 - 📈 **Admin Dashboard**: View submissions, export to Excel, download files
@@ -26,9 +26,8 @@ AI-powered prompt analysis platform for evaluating creative prompts across multi
 - Node.js
 - Express
 - MongoDB (Mongoose)
-- Groq API (Llama 3.1 8B Instant)
-- Multer (file uploads)
-- ExcelJS (Excel export)
+- Multer (file uploads & leaderboards)
+- ExcelJS (Excel export & parsing)
 
 ## Project Structure
 
@@ -55,7 +54,6 @@ GenAi Club/
 
 - Node.js (v16 or higher)
 - MongoDB (local or Atlas)
-- Groq API key ([Get one here](https://console.groq.com/))
 
 ### Backend Setup
 
@@ -72,7 +70,6 @@ npm install
 3. Create `.env` file:
 ```env
 MONGODB_URI=your_mongodb_connection_string
-GROQ_API_KEY=your_groq_api_key
 PORT=5000
 FRONTEND_URL=*
 ```
@@ -122,15 +119,20 @@ npm run build
 ### Submissions
 - `POST /api/submissions` - Submit a new prompt (with file upload)
 - `GET /api/submissions` - Get all submissions
-- `GET /api/export-submissions` - Export to Excel
+- `GET /api/export-submissions` - Export to Excel (admin-only token header)
 - `GET /api/files` - List uploaded files
 - `GET /api/download-file/:id` - Download file
+
+### Leaderboards
+- `POST /api/admin/leaderboard/upload` - Admin upload endpoint for Excel leaderboard files
+- `GET /api/leaderboard/:category` - Public endpoint returning leaderboard data for a category
+- `POST /api/admin/leaderboard/visibility` - Publish or hide a category leaderboard (admin token required)
+- `POST /api/admin/leaderboard/reset` - Delete the uploaded leaderboard + Excel file for a category
 
 ## Environment Variables
 
 ### Backend (`server/.env`)
 - `MONGODB_URI` - MongoDB connection string (required)
-- `GROQ_API_KEY` - Groq API key (required)
 - `PORT` - Server port (default: 5000)
 - `FRONTEND_URL` - Frontend URL for CORS (default: *)
 

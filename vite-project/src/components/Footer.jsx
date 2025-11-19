@@ -35,6 +35,11 @@ const Footer = () => {
                   Evaluation Process
                 </Link>
               </li>
+                  <li>
+                    <Link to="/leaderboard" className="text-gray-400 hover:text-yellow-400 transition-colors">
+                      Leaderboard
+                    </Link>
+                  </li>
               <li>
                 <Link to="/login" className="text-gray-400 hover:text-yellow-400 transition-colors">
                   Login

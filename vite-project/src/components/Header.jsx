@@ -51,6 +51,16 @@ const Header = () => {
             >
               Evaluation Process
             </NavLink>
+                <NavLink
+                  to="/leaderboard"
+                  className={({ isActive }) =>
+                    isActive
+                      ? 'text-yellow-400 font-medium'
+                      : 'text-white hover:text-yellow-400 transition-colors'
+                  }
+                >
+                  Leaderboard
+                </NavLink>
           </nav>
           
           <div className="flex items-center gap-4">
